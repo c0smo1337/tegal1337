@@ -1,26 +1,321 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TEGAL 1337</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Raleway:wght@200;400;800&display=swap" rel="stylesheet">
 <style>
-body{
-margin:0;
-height:100vh;
-display:grid;
-place-items:center;
-background:white;
-}
-img{
-width:min(80vw,500px);
-cursor:pointer;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fff;
+    color: #111;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* INTRO */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    animation: introOut 0.6s cubic-bezier(.77,0,.18,1) 3.2s forwards;
+  }
+  @keyframes introOut {
+    0%   { clip-path: inset(0 0 0 0); }
+    100% { clip-path: inset(0 0 100% 0); }
+  }
+
+  .intro-word {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 10vw, 120px);
+    letter-spacing: -0.02em;
+    color: #111;
+    position: relative;
+    animation: wordIn 0.5s cubic-bezier(.22,1,.36,1) 0.1s both;
+  }
+  @keyframes wordIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .intro-word::before, .intro-word::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  .intro-word::before {
+    color: #111;
+    animation: gBefore 3s ease 0.5s forwards;
+    clip-path: polygon(0 20%, 100% 20%, 100% 50%, 0 50%);
+  }
+  .intro-word::after {
+    color: #111;
+    animation: gAfter 3s ease 0.5s forwards;
+    clip-path: polygon(0 55%, 100% 55%, 100% 80%, 0 80%);
+  }
+  @keyframes gBefore {
+    0%,39%  { transform: translateX(0); opacity: 0; }
+    40%  { transform: translateX(-8px); opacity: 1; filter: blur(1px); }
+    41%  { transform: translateX(6px); }
+    42%  { opacity: 0; }
+    69%  { opacity: 0; }
+    70%  { transform: translateX(-12px); opacity: 1; }
+    71%  { transform: translateX(4px); }
+    72%  { opacity: 0; }
+    89%  { opacity: 0; }
+    90%  { transform: translateX(-4px); opacity: 1; }
+    91%  { opacity: 0; }
+  }
+  @keyframes gAfter {
+    0%,39%  { transform: translateX(0); opacity: 0; }
+    40%  { transform: translateX(8px); opacity: 1; filter: blur(1px); }
+    41%  { transform: translateX(-6px); }
+    42%  { opacity: 0; }
+    69%  { opacity: 0; }
+    70%  { transform: translateX(12px); opacity: 1; }
+    71%  { transform: translateX(-4px); }
+    72%  { opacity: 0; }
+    89%  { opacity: 0; }
+    90%  { transform: translateX(4px); opacity: 1; }
+    91%  { opacity: 0; }
+  }
+  .tear { position: absolute; left: 0; right: 0; height: 2px; background: #111; opacity: 0; pointer-events: none; animation: tearAnim 3s ease 0.5s forwards; }
+  .tear1 { top: 38%; } .tear2 { top: 63%; }
+  @keyframes tearAnim {
+    0%,39%  { opacity: 0; transform: scaleX(0); }
+    40%  { opacity: 1; transform: scaleX(1); }
+    41%  { opacity: 0.3; transform: scaleX(0.5) translateX(20px); }
+    42%  { opacity: 0; }
+    70%  { opacity: 0; }
+    70.5%{ opacity: 1; transform: scaleX(0.8); }
+    71%  { opacity: 0; }
+  }
+
+  /* MAIN */
+  #main {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: mainIn 0.8s cubic-bezier(.22,1,.36,1) 3.5s forwards;
+  }
+  @keyframes mainIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* tagline — less margin so it's closer to logo */
+  .tagline {
+    font-weight: 300;
+    font-size: clamp(9px, 1.1vw, 12px);
+    letter-spacing: 0.5em;
+    color: #bbb;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    animation: fadeUp 0.7s ease 3.7s both;
+  }
+
+  /* Logo */
+  .logo-wrap {
+    position: relative;
+    width: clamp(148px, 19vw, 230px);
+    height: clamp(148px, 19vw, 230px);
+    margin-bottom: 28px;
+    animation: logoUp 0.9s cubic-bezier(.22,1,.36,1) 3.6s both;
+  }
+  @keyframes logoUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    animation: idleFloat 5s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+  }
+  @keyframes idleFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-7px); }
+  }
+
+  /* SVG rings drawn precisely around the circular logo */
+  .ring-svg {
+    position: absolute;
+    /* extend slightly beyond the img so rings clear the logo edge */
+    inset: -14px;
+    width: calc(100% + 28px);
+    height: calc(100% + 28px);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .ring-inner { animation: spin 7s linear infinite; transform-origin: 50% 50%; }
+  .ring-outer { animation: spin 12s linear infinite reverse; transform-origin: 50% 50%; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* headline */
+  .headline {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 800;
+    font-size: clamp(24px, 4vw, 52px);
+    letter-spacing: -0.02em;
+    color: #111;
+    text-align: center;
+    line-height: 1;
+    animation: fadeUp 0.7s ease 3.9s both, idleGlitch 10s ease 6s infinite;
+    text-decoration: none;
+    display: block;
+  }
+  a.headline:hover { opacity: 0.75; }
+
+  .headline em {
+    font-style: normal;
+    position: relative;
+    display: inline-block;
+  }
+  .headline em::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -5px;
+    height: 2px;
+    background: #111;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: lineIn 0.5s cubic-bezier(.22,1,.36,1) 4.6s forwards;
+  }
+  @keyframes lineIn { to { transform: scaleX(1); } }
+
+  @keyframes idleGlitch {
+    0%,91%,100% { transform: skewX(0) translateX(0); }
+    92% { transform: skewX(-2deg) translateX(-5px); }
+    93% { transform: skewX(1.5deg) translateX(5px); }
+    94% { transform: skewX(0) translateX(0); }
+  }
+
+  .sub {
+    font-weight: 400;
+    font-size: clamp(9px, 1.1vw, 12px);
+    letter-spacing: 0.4em;
+    color: #ccc;
+    text-transform: uppercase;
+    margin-top: 10px;
+    animation: fadeUp 0.7s ease 4.1s both;
+  }
+
+  .since {
+    margin-top: 18px;
+    font-weight: 700;
+    font-size: clamp(8px, 0.9vw, 11px);
+    letter-spacing: 0.6em;
+    color: #ddd;
+    text-transform: uppercase;
+    animation: fadeUp 0.6s ease 4.2s both;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .since::before, .since::after {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: #e0e0e0;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* bottom strip */
+  .strip {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 2px; background: #111;
+    transform: scaleX(0); transform-origin: left;
+    animation: stripIn 0.7s cubic-bezier(.22,1,.36,1) 4.8s forwards;
+  }
+  @keyframes stripIn { to { transform: scaleX(1); } }
+
+  .foot-r {
+    position: fixed; bottom: 13px; right: 20px;
+    font-size: 9px; letter-spacing: 0.35em; color: #ccc; text-transform: uppercase;
+    opacity: 0; animation: fadeUp 0.5s ease 5s forwards;
+  }
+  .foot-l {
+    position: fixed; bottom: 13px; left: 20px;
+    font-size: 9px; letter-spacing: 0.35em; color: #ccc; text-transform: uppercase;
+    opacity: 0; animation: fadeUp 0.5s ease 5.1s forwards;
+  }
 </style>
 </head>
 <body>
 
-<a href="https://t.me/sibertegal" target="_blank">
-  <img src="https://raw.githubusercontent.com/c0smo1337/tegal1337/main/logo.png">
-</a>
+<!-- INTRO -->
+<div id="intro">
+  <div class="tear tear1"></div>
+  <div class="tear tear2"></div>
+  <span class="intro-word" data-text="TEGAL 1337">TEGAL 1337</span>
+</div>
 
+<!-- MAIN -->
+<div id="main">
+  <p class="tagline">Cyber Crime Community</p>
+
+  <div class="logo-wrap">
+    <img src="/tegal.png" alt="TEGAL 1337" id="logo" />
+    <!-- SVG rings perfectly centred on the circular logo -->
+    <svg class="ring-svg" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- inner ring: r=114 so it sits just outside the logo circle -->
+      <circle class="ring-inner" cx="128" cy="128" r="114"
+        stroke="#111" stroke-width="1.5"
+        stroke-dasharray="60 300"
+        stroke-linecap="round"/>
+      <!-- outer ring -->
+      <circle class="ring-outer" cx="128" cy="128" r="124"
+        stroke="#ccc" stroke-width="1"
+        stroke-dasharray="30 350"
+        stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- JOIN COMMUNITY → links to Telegram -->
+  <a class="headline" href="https://t.me/sibertegal" target="_blank">JOIN <em>COMMUNITY</em></a>
+  <p class="sub">Tegal 1337 &nbsp;·&nbsp; Est. 2016</p>
+  <div class="since">Since 2016</div>
+</div>
+
+<div class="strip"></div>
+<div class="foot-r">t.me/sibertegal</div>
+<div class="foot-l">tegal 1337</div>
+
+<script>
+  const img = document.getElementById('logo');
+  const c = document.createElement('canvas');
+  const ctx = c.getContext('2d');
+  const src = new Image();
+  src.crossOrigin = 'anonymous';
+  src.onload = () => {
+    c.width = src.width; c.height = src.height;
+    ctx.drawImage(src, 0, 0);
+    try { img.src = c.toDataURL(); } catch(e) {}
+  };
+  src.onerror = () => {};
+  src.src = img.src;
+</script>
 </body>
 </html>
